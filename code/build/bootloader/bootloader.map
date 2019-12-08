@@ -1413,7 +1413,7 @@ END GROUP
  *(.jcr)
                 0x000000003fff001c                _data_end = ABSOLUTE (.)
 
-.dram0.rodata   0x000000003fff001c     0x1c00
+.dram0.rodata   0x000000003fff001c     0x1be8
                 0x000000003fff001c                _rodata_start = ABSOLUTE (.)
  *(.rodata)
  .rodata        0x000000003fff001c       0x14 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
@@ -1423,96 +1423,96 @@ END GROUP
                 0x000000003fff0038       0x3b /home/andy/devices/grow/code/build/bootloader/main/libmain.a(bootloader_start.o)
  *fill*         0x000000003fff0073        0x1 
  .rodata.str1.4
-                0x000000003fff0074      0x486 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
-                                        0x48e (size before relaxing)
- *fill*         0x000000003fff04fa        0x2 
+                0x000000003fff0074      0x482 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                                        0x48a (size before relaxing)
+ *fill*         0x000000003fff04f6        0x2 
  .rodata.__func__$7605
-                0x000000003fff04fc       0x10 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                0x000000003fff04f8       0x10 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
  .rodata.str1.4
-                0x000000003fff050c      0x200 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+                0x000000003fff0508      0x200 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
  .rodata.str1.4
-                0x000000003fff070c       0x61 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
- *fill*         0x000000003fff076d        0x3 
+                0x000000003fff0708       0x5d /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
+ *fill*         0x000000003fff0765        0x3 
  .rodata.__func__$4766
-                0x000000003fff0770       0x17 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
- *fill*         0x000000003fff0787        0x1 
+                0x000000003fff0768       0x17 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
+ *fill*         0x000000003fff077f        0x1 
  .rodata.str1.4
-                0x000000003fff0788      0x163 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- *fill*         0x000000003fff08eb        0x1 
+                0x000000003fff0780      0x163 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ *fill*         0x000000003fff08e3        0x1 
  .rodata.str1.4
-                0x000000003fff08ec      0x542 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
-                                        0x582 (size before relaxing)
- *fill*         0x000000003fff0e2e        0x2 
+                0x000000003fff08e4      0x53e /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                                        0x57e (size before relaxing)
+ *fill*         0x000000003fff0e22        0x2 
  .rodata.__func__$4079
-                0x000000003fff0e30       0x20 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x000000003fff0e24       0x20 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
  .rodata.str1.4
-                0x000000003fff0e50      0x62a /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
-                                        0x6a6 (size before relaxing)
- *fill*         0x000000003fff147a        0x2 
+                0x000000003fff0e44      0x626 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                                        0x6a2 (size before relaxing)
+ *fill*         0x000000003fff146a        0x2 
  .rodata.bootloader_utility_load_partition_table
-                0x000000003fff147c       0x18 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                0x000000003fff146c       0x18 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
  .rodata.__func__$6907
-                0x000000003fff1494       0x18 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                0x000000003fff1484       0x18 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
  .rodata.str1.4
-                0x000000003fff14ac       0xd4 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+                0x000000003fff149c       0xd0 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
  .rodata.padding$3802
-                0x000000003fff1580       0x40 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+                0x000000003fff156c       0x40 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
  .rodata.__func__$3798
-                0x000000003fff15c0       0x19 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
- *fill*         0x000000003fff15d9        0x3 
+                0x000000003fff15ac       0x19 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+ *fill*         0x000000003fff15c5        0x3 
  .rodata.__func__$3778
-                0x000000003fff15dc       0x17 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
- *fill*         0x000000003fff15f3        0x1 
+                0x000000003fff15c8       0x17 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+ *fill*         0x000000003fff15df        0x1 
  .rodata.str1.4
-                0x000000003fff15f4      0x28e /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- *fill*         0x000000003fff1882        0x2 
+                0x000000003fff15e0      0x28e /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ *fill*         0x000000003fff186e        0x2 
  .rodata.str1.4
-                0x000000003fff1884      0x1cb /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
- *fill*         0x000000003fff1a4f        0x1 
+                0x000000003fff1870      0x1cb /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
+ *fill*         0x000000003fff1a3b        0x1 
  .rodata.rtc_clk_xtal_freq_estimate
-                0x000000003fff1a50       0x64 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
+                0x000000003fff1a3c       0x64 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
  .rodata.str1.4
-                0x000000003fff1ab4       0xa9 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
- *fill*         0x000000003fff1b5d        0x3 
+                0x000000003fff1aa0       0xa5 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
+ *fill*         0x000000003fff1b45        0x3 
  .rodata.__func__$3554
-                0x000000003fff1b60       0x15 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
- *fill*         0x000000003fff1b75        0x3 
+                0x000000003fff1b48       0x15 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
+ *fill*         0x000000003fff1b5d        0x3 
  .rodata.str1.4
-                0x000000003fff1b78       0xa4 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
+                0x000000003fff1b60       0xa4 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
                                          0xa1 (size before relaxing)
  *(.gnu.linkonce.r.*)
  *(.rodata1)
-                0x000000003fff1c1c                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
+                0x000000003fff1c04                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
  *(.xt_except_table)
  *(.gcc_except_table)
  *(.gnu.linkonce.e.*)
  *(.gnu.version_r)
  *(.eh_frame)
-                0x000000003fff1c1c                . = ((. + 0x3) & 0xfffffffffffffffc)
-                0x000000003fff1c1c                __init_array_start = ABSOLUTE (.)
+                0x000000003fff1c04                . = ((. + 0x3) & 0xfffffffffffffffc)
+                0x000000003fff1c04                __init_array_start = ABSOLUTE (.)
  *crtbegin.*(.ctors)
  *(EXCLUDE_FILE(*crtend.*) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x000000003fff1c1c                __init_array_end = ABSOLUTE (.)
+                0x000000003fff1c04                __init_array_end = ABSOLUTE (.)
  *crtbegin.*(.dtors)
  *(EXCLUDE_FILE(*crtend.*) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x000000003fff1c1c                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
+                0x000000003fff1c04                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
  *(.xt_except_desc)
  *(.gnu.linkonce.h.*)
-                0x000000003fff1c1c                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
+                0x000000003fff1c04                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
  *(.xt_except_desc_end)
  *(.dynamic)
  *(.gnu.version_d)
-                0x000000003fff1c1c                _rodata_end = ABSOLUTE (.)
-                0x000000003fff1c1c                _lit4_start = ABSOLUTE (.)
+                0x000000003fff1c04                _rodata_end = ABSOLUTE (.)
+                0x000000003fff1c04                _lit4_start = ABSOLUTE (.)
  *(*.lit4)
  *(.lit4.*)
  *(.gnu.linkonce.lit4.*)
-                0x000000003fff1c1c                _lit4_end = ABSOLUTE (.)
-                0x000000003fff1c1c                . = ALIGN (0x4)
+                0x000000003fff1c04                _lit4_end = ABSOLUTE (.)
+                0x000000003fff1c04                . = ALIGN (0x4)
                 0x0000000040008550                PROVIDE (ets_update_cpu_frequency, 0x40008550)
                 0x000000004005db1c                PROVIDE (MD5Final, 0x4005db1c)
                 0x000000004005da7c                PROVIDE (MD5Init, 0x4005da7c)
@@ -3368,80 +3368,80 @@ OUTPUT(/home/andy/devices/grow/code/build/bootloader/bootloader.elf elf32-xtensa
  .debug_ranges  0x00000000000006d8      0x110 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
  .debug_ranges  0x00000000000007e8       0x60 /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_udivdi3.o)
 
-.debug_line     0x0000000000000000     0x7f47
- .debug_line    0x0000000000000000      0x400 /home/andy/devices/grow/code/build/bootloader/main/libmain.a(bootloader_start.o)
- .debug_line    0x0000000000000400      0x993 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
- .debug_line    0x0000000000000d93      0x8cc /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
- .debug_line    0x000000000000165f      0x244 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_clock.o)
- .debug_line    0x00000000000018a3      0x3b4 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
- .debug_line    0x0000000000001c57      0x458 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash_config_esp32.o)
- .debug_line    0x00000000000020af      0x390 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- .debug_line    0x000000000000243f      0xc8d /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- .debug_line    0x00000000000030cc      0xc1b /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- .debug_line    0x0000000000003ce7      0x3d7 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
- .debug_line    0x00000000000040be      0x1ac /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_efuse_esp32.o)
- .debug_line    0x000000000000426a      0x685 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .debug_line    0x00000000000048ef      0x552 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_qio_mode.o)
- .debug_line    0x0000000000004e41      0x4e1 /home/andy/devices/grow/code/build/bootloader/log/liblog.a(log.o)
- .debug_line    0x0000000000005322      0xae2 /home/andy/devices/grow/code/build/bootloader/spi_flash/libspi_flash.a(spi_flash_rom_patch.o)
- .debug_line    0x0000000000005e04      0x1ae /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(cpu_util.o)
- .debug_line    0x0000000000005fb2      0x46a /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_wdt.o)
- .debug_line    0x000000000000641c      0x3d2 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_init.o)
- .debug_line    0x00000000000067ee      0x3cd /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
- .debug_line    0x0000000000006bbb      0x100 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(gpio_periph.o)
- .debug_line    0x0000000000006cbb      0x430 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
- .debug_line    0x00000000000070eb      0xc45 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
- .debug_line    0x0000000000007d30       0x89 /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_bswapsi2.o)
- .debug_line    0x0000000000007db9      0x18e /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_udivdi3.o)
+.debug_line     0x0000000000000000     0x7df3
+ .debug_line    0x0000000000000000      0x3ec /home/andy/devices/grow/code/build/bootloader/main/libmain.a(bootloader_start.o)
+ .debug_line    0x00000000000003ec      0x96f /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+ .debug_line    0x0000000000000d5b      0x8ac /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+ .debug_line    0x0000000000001607      0x238 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_clock.o)
+ .debug_line    0x000000000000183f      0x3ac /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
+ .debug_line    0x0000000000001beb      0x448 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash_config_esp32.o)
+ .debug_line    0x0000000000002033      0x37c /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_line    0x00000000000023af      0xc71 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_line    0x0000000000003020      0xbff /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ .debug_line    0x0000000000003c1f      0x3cb /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+ .debug_line    0x0000000000003fea      0x1a8 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_efuse_esp32.o)
+ .debug_line    0x0000000000004192      0x671 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_line    0x0000000000004803      0x53e /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_qio_mode.o)
+ .debug_line    0x0000000000004d41      0x4d1 /home/andy/devices/grow/code/build/bootloader/log/liblog.a(log.o)
+ .debug_line    0x0000000000005212      0xada /home/andy/devices/grow/code/build/bootloader/spi_flash/libspi_flash.a(spi_flash_rom_patch.o)
+ .debug_line    0x0000000000005cec      0x1aa /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(cpu_util.o)
+ .debug_line    0x0000000000005e96      0x46a /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_wdt.o)
+ .debug_line    0x0000000000006300      0x3ca /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_init.o)
+ .debug_line    0x00000000000066ca      0x3bd /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
+ .debug_line    0x0000000000006a87      0x100 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(gpio_periph.o)
+ .debug_line    0x0000000000006b87      0x420 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
+ .debug_line    0x0000000000006fa7      0xc35 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
+ .debug_line    0x0000000000007bdc       0x89 /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_bswapsi2.o)
+ .debug_line    0x0000000000007c65      0x18e /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_udivdi3.o)
 
-.debug_str      0x0000000000000000     0x5597
- .debug_str     0x0000000000000000      0x7a1 /home/andy/devices/grow/code/build/bootloader/main/libmain.a(bootloader_start.o)
-                                        0x838 (size before relaxing)
- .debug_str     0x00000000000007a1      0xd27 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
-                                       0x1073 (size before relaxing)
- .debug_str     0x00000000000014c8      0x6c4 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
-                                        0xb05 (size before relaxing)
- .debug_str     0x0000000000001b8c      0x25b /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_clock.o)
-                                        0x3ec (size before relaxing)
- .debug_str     0x0000000000001de7       0xaa /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
-                                        0x25d (size before relaxing)
- .debug_str     0x0000000000001e91      0x13c /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash_config_esp32.o)
-                                        0x4c3 (size before relaxing)
- .debug_str     0x0000000000001fcd       0xb0 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
-                                        0x3c1 (size before relaxing)
- .debug_str     0x000000000000207d      0x3db /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
-                                        0xb47 (size before relaxing)
- .debug_str     0x0000000000002458      0x2fe /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
-                                        0xa90 (size before relaxing)
- .debug_str     0x0000000000002756       0xf6 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
-                                        0x301 (size before relaxing)
- .debug_str     0x000000000000284c       0x7f /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_efuse_esp32.o)
-                                        0x238 (size before relaxing)
- .debug_str     0x00000000000028cb      0x214 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
-                                        0x60e (size before relaxing)
- .debug_str     0x0000000000002adf     0x17e8 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_qio_mode.o)
-                                       0x1bc0 (size before relaxing)
- .debug_str     0x00000000000042c7      0x18a /home/andy/devices/grow/code/build/bootloader/log/liblog.a(log.o)
-                                        0x346 (size before relaxing)
- .debug_str     0x0000000000004451      0x367 /home/andy/devices/grow/code/build/bootloader/spi_flash/libspi_flash.a(spi_flash_rom_patch.o)
-                                        0x77e (size before relaxing)
- .debug_str     0x00000000000047b8       0x6e /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(cpu_util.o)
-                                        0x183 (size before relaxing)
- .debug_str     0x0000000000004826      0x185 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_wdt.o)
+.debug_str      0x0000000000000000     0x5547
+ .debug_str     0x0000000000000000      0x79d /home/andy/devices/grow/code/build/bootloader/main/libmain.a(bootloader_start.o)
+                                        0x834 (size before relaxing)
+ .debug_str     0x000000000000079d      0xd23 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                                       0x106f (size before relaxing)
+ .debug_str     0x00000000000014c0      0x6c0 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+                                        0xb01 (size before relaxing)
+ .debug_str     0x0000000000001b80      0x257 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_clock.o)
+                                        0x3e8 (size before relaxing)
+ .debug_str     0x0000000000001dd7       0xa6 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_random.o)
+                                        0x259 (size before relaxing)
+ .debug_str     0x0000000000001e7d      0x138 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash_config_esp32.o)
+                                        0x4bf (size before relaxing)
+ .debug_str     0x0000000000001fb5       0xac /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+                                        0x3bd (size before relaxing)
+ .debug_str     0x0000000000002061      0x3d7 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                                        0xb43 (size before relaxing)
+ .debug_str     0x0000000000002438      0x2fa /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                                        0xa8c (size before relaxing)
+ .debug_str     0x0000000000002732       0xf2 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_sha.o)
+                                        0x2fd (size before relaxing)
+ .debug_str     0x0000000000002824       0x7b /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_efuse_esp32.o)
+                                        0x234 (size before relaxing)
+ .debug_str     0x000000000000289f      0x210 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+                                        0x60a (size before relaxing)
+ .debug_str     0x0000000000002aaf     0x17e4 /home/andy/devices/grow/code/build/bootloader/bootloader_support/libbootloader_support.a(flash_qio_mode.o)
+                                       0x1bbc (size before relaxing)
+ .debug_str     0x0000000000004293      0x186 /home/andy/devices/grow/code/build/bootloader/log/liblog.a(log.o)
+                                        0x342 (size before relaxing)
+ .debug_str     0x0000000000004419      0x363 /home/andy/devices/grow/code/build/bootloader/spi_flash/libspi_flash.a(spi_flash_rom_patch.o)
+                                        0x77a (size before relaxing)
+ .debug_str     0x000000000000477c       0x6a /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(cpu_util.o)
+                                        0x17f (size before relaxing)
+ .debug_str     0x00000000000047e6      0x185 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_wdt.o)
                                         0x50f (size before relaxing)
- .debug_str     0x00000000000049ab       0xc4 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_init.o)
-                                        0x265 (size before relaxing)
- .debug_str     0x0000000000004a6f      0x2d0 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
-                                        0x6cf (size before relaxing)
- .debug_str     0x0000000000004d3f       0x3e /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(gpio_periph.o)
+ .debug_str     0x000000000000496b       0xc0 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_init.o)
+                                        0x261 (size before relaxing)
+ .debug_str     0x0000000000004a2b      0x2cc /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk_init.o)
+                                        0x6cb (size before relaxing)
+ .debug_str     0x0000000000004cf7       0x3e /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(gpio_periph.o)
                                         0x144 (size before relaxing)
- .debug_str     0x0000000000004d7d      0x15e /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
-                                        0x46e (size before relaxing)
- .debug_str     0x0000000000004edb      0x4a8 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
-                                        0xa65 (size before relaxing)
- .debug_str     0x0000000000005383      0x138 /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_bswapsi2.o)
+ .debug_str     0x0000000000004d35      0x15a /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_time.o)
+                                        0x46a (size before relaxing)
+ .debug_str     0x0000000000004e8f      0x4a4 /home/andy/devices/grow/code/build/bootloader/soc/libsoc.a(rtc_clk.o)
+                                        0xa61 (size before relaxing)
+ .debug_str     0x0000000000005333      0x138 /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_bswapsi2.o)
                                         0x1de (size before relaxing)
- .debug_str     0x00000000000054bb       0xdc /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_udivdi3.o)
+ .debug_str     0x000000000000546b       0xdc /usr/local/src/esp/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/5.2.0/libgcc.a(_udivdi3.o)
                                         0x258 (size before relaxing)
 
 .comment        0x0000000000000000       0x3a
