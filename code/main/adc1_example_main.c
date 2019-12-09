@@ -63,7 +63,7 @@ void app_main(void)
     // init temp sensor
     struct DS18B20_Info * info;
     info = ds18b20_malloc();
-    // ds18b20_init(info, bus, code);
+    ds18b20_init_solo(info, bus);
 
     //Configure ADC
     if (unit == ADC_UNIT_1) {
