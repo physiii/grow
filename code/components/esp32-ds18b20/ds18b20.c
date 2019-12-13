@@ -44,9 +44,10 @@
 #include "esp_system.h"
 #include "esp_log.h"
 
-#include "include/ds18b20.h"
+#include "ds18b20.h"
+#include "owb.h"
 
-// static const char * TAG = "ds18b20";
+static const char * TAG = "ds18b20";
 static const int T_CONV = 750;   // maximum conversion time at 12-bit resolution in milliseconds
 
 // Function commands
@@ -86,7 +87,6 @@ static void _init(DS18B20_Info * ds18b20_info, const OneWireBus * bus)
     }
 }
 
-/*
 static bool _is_init(const DS18B20_Info * ds18b20_info)
 {
     bool ok = false;
@@ -108,7 +108,6 @@ static bool _is_init(const DS18B20_Info * ds18b20_info)
     }
     return ok;
 }
-*/
 
 static bool _address_device(const DS18B20_Info * ds18b20_info)
 {
@@ -244,7 +243,7 @@ DS18B20_Info * ds18b20_malloc(void)
     if (ds18b20_info != NULL)
     {
         memset(ds18b20_info, 0, sizeof(*ds18b20_info));
-        ESP_LOGE(TAG, "malloc %p", ds18b20_info);
+        ESP_LOGD(TAG, "malloc %p", ds18b20_info);
     }
     else
     {
@@ -494,3 +493,5 @@ DS18B20_ERROR ds18b20_convert_and_read_temp(const DS18B20_Info * ds18b20_info, f
     }
     return err;
 }
+
+

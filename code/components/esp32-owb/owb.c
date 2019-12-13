@@ -39,8 +39,8 @@
 #include "sdkconfig.h"
 #include "driver/gpio.h"
 
-#include "include/owb.h"
-#include "include/owb_gpio.h"
+#include "owb.h"
+#include "owb_gpio.h"
 
 static const char * TAG = "owb";
 

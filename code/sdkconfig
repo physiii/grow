@@ -110,6 +110,26 @@ CONFIG_ESPTOOLPY_MONITOR_BAUD=115200
 # end of Serial flasher config
 
 #
+# Server Configuration
+#
+CONFIG_SERVER_URI="ws://192.168.0.236:5050"
+# end of Server Configuration
+
+#
+# Wifi Configuration
+#
+CONFIG_ESP_WIFI_SSID="Echo_42"
+CONFIG_ESP_WIFI_PASSWORD="qscwdvpk"
+CONFIG_ESP_MAXIMUM_RETRY=10
+# end of Wifi Configuration
+
+#
+# ds18b20 Configuration
+#
+CONFIG_ONE_WIRE_GPIO=22
+# end of ds18b20 Configuration
+
+#
 # Partition Table
 #
 CONFIG_PARTITION_TABLE_SINGLE_APP=y

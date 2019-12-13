@@ -3,7 +3,6 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := adc
+PROJECT_NAME := grow
 
 include $(IDF_PATH)/make/project.mk
-

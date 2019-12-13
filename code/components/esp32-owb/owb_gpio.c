@@ -54,8 +54,8 @@ static const char * TAG = "owb_gpio";
 
 #ifdef PHY_DEBUG
 // Update these defines to a pin that you can access
-#define PHY_DEBUG_GPIO GPIO_NUM_12
-#define PHY_DEBUG_GPIO_MASK GPIO_SEL_12
+#define PHY_DEBUG_GPIO GPIO_NUM_27
+#define PHY_DEBUG_GPIO_MASK GPIO_SEL_27
 #endif
 
 /// @cond ignore
