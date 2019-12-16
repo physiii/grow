@@ -286,7 +286,7 @@ websocket_relay_task(void *pvParameter)
 }
 
 static void
-websocket_utilities_start(void)
+websocket_utilities_task(void *pvParameter)
 {
     char utilities_uri[100];
     strcpy(utilities_uri, SERVER_URI);

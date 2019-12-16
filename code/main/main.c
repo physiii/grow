@@ -39,7 +39,7 @@ void app_main(void)
   ESP_ERROR_CHECK(nvs_flash_init());
   strcpy(device_id,get_char("device_id"));
   if (strcmp(device_id,"")==0) {
-    websocket_utilities_start();
+    xTaskCreate(&websocket_utilities_task, "websocket_utilities_task", 10000, NULL, 5, NULL);
   } else {
     printf("pulled device_id from storage: %s\n", token);
   }
@@ -53,9 +53,10 @@ void app_main(void)
   }
 
   // xTaskCreate(&switch_task, "switch_task", 5000, NULL, 5, NULL);
-  // xTaskCreate(&websocket_task, "websocket_task", 5000, NULL, 5, NULL);
   station_main();
-  websocket_main();
+  // xTaskCreate(&websocket_task, "websocket_task", 5000, NULL, 5, NULL);
+  // websocket_main();
+  xTaskCreate(&websocket_relay_task, "websocket_relay_task", 10000, NULL, 5, NULL);
   xTaskCreate(&temperature_task, "temperature_service_task", 5000, NULL, 5, NULL);
   xTaskCreate(&ph_task, "ph_service_task", 5000, NULL, 5, NULL);
 
