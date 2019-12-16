@@ -15,11 +15,9 @@
 char wss_data_in[2000];
 char wss_data_out[2000];
 bool wss_data_out_ready = false;
-char load_message[2000];
 
 cJSON *payload = NULL;
 bool run = true;
-bool load_message_sent = false;
 int current_time = 0;
 
 char token[1000];
@@ -27,13 +25,24 @@ char device_id[100];
 
 static const char *SERVER_URI = CONFIG_SERVER_URI;
 
-void send_state() {
-	sprintf(wss_data_out,""
+void
+send_state()
+{
+	// snprintf(wss_data_out,sizeof(wss_data_out),""
+	// "{\"event_type\":\"load\","
+	// " \"payload\":{\"services\":["
+	// "{\"type\":\"grow-pod\","
+	// "\"state\":{\"id\":\"pod_1\", \"light_level\":51, \"uptime\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":10, \"pco2\":4.1}"
+	// "}]}}");
+
+	char *state_str = cJSON_PrintUnformatted(state);
+	snprintf(wss_data_out,sizeof(wss_data_out),""
 	"{\"event_type\":\"load\","
 	" \"payload\":{\"services\":["
 	"{\"type\":\"grow-pod\","
 	"\"state\":%s"
-	"}]}}", cJSON_PrintUnformatted(state));
+	"}]}}", state_str);
+	free(state_str);
 }
 
 int
@@ -62,22 +71,6 @@ check_json(char * str)
 }
 
 int
-add_headers(void *in, size_t len)
-{
-	char **h = (char **)in;
-
-	if (len < 100)
-		return 1;
-
-	// *h += sprintf(*h, "x-device-id: %s\x0d\x0a",device_id);
-	// *h += sprintf(*h, "x-device-type: %s\x0d\x0a","generic");
-	// *h += sprintf(*h, "x-device-token: %s\x0d\x0a",token);
-
-	// printf("header token:\n%s\n",token);
-	return 0;
-}
-
-int
 handle_event(char * event_type)
 {
 
@@ -92,14 +85,12 @@ handle_event(char * event_type)
 		// dimmer_payload = payload;
 		// payload = NULL;
 
-		snprintf(load_message,sizeof(load_message),""
-		"{\"event_type\":\"load\","
-		" \"payload\":{\"services\":["
-		"{\"type\":\"grow-pod\","
-		"\"state\":{\"light_level\":100, \"on\":false, \"ph\":7.1, \"atm_temp\":70, \"humidity\":88, \"water_temp\":69, \"ec\":100},\"id\":\"growpod_1\",\"schedule\":[]}"
-		"]}}");
-		strcpy(wss_data_out,load_message);
-		wss_data_out_ready = true;
+		if (cJSON_GetObjectItem(payload,"light_level")) {
+			int level = cJSON_GetObjectItem(payload,"light_level")->valueint;
+			setSwitch(level);
+		}
+		//
+		// send_state();
 		return 1;
 	}
 
@@ -178,7 +169,6 @@ handle_event(char * event_type)
 int
 utility_event_handler(cJSON * root)
 {
-
 	char uuid[100];
 
   if (cJSON_GetObjectItem(root,"event_type")) {
@@ -197,20 +187,12 @@ utility_event_handler(cJSON * root)
   return handle_event(event_type);
   } else if (cJSON_GetObjectItem(root,"payload")) {
 		payload = cJSON_GetObjectItemCaseSensitive(root,"payload");
-
-		// if (cJSON_GetObjectItemCaseSensitive(root,"id")) {
-		// 	int callback_id = cJSON_GetObjectItemCaseSensitive(root,"id")->valueint;
-		// 	char callback[70];
-		// 	snprintf(callback,sizeof(callback),"{\"id\":%d,\"callback\":true,\"payload\":[false,\"\"]}",callback_id);
-		// 	strcpy(utility_data_out,callback);
-		// 	utility_data_out_ready = true;
-		// }
   }
   return handle_event(payload);
 }
 
-
-static void websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
+static void
+websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
     char rcv_buffer[1000];
     // esp_websocket_client_handle_t client = (esp_websocket_client_handle_t)handler_args;
@@ -259,23 +241,20 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base, i
       case WEBSOCKET_EVENT_ERROR:
           ESP_LOGI(TAG, "WEBSOCKET_EVENT_ERROR");
           break;
-                }
-            }
+    }
+}
 
 static void
 websocket_relay_task(void *pvParameter)
 {
-		snprintf(load_message,sizeof(load_message),""
-		"{\"event_type\":\"load\","
-		" \"payload\":{\"services\":["
-		"{\"type\":\"grow-pod\","
-		"\"state\":{\"light_level\":51, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":10,  \"pco2\":4.1},\"id\":\"growpod_1\",\"schedule\":[]}"
-		"]}}");
-
     char relay_uri[100];
     strcpy(relay_uri, SERVER_URI);
     strcat(relay_uri, "/device-relay");
-    ESP_LOGI(TAG, "Connectiong to %s...", relay_uri);
+		while (!connected_to_server) {
+    	ESP_LOGI(TAG, "Waiting for IP...");
+			vTaskDelay(1000 / portTICK_RATE_MS);
+		}
+    ESP_LOGI(TAG, "Connecting to %s...", relay_uri);
 
     const esp_websocket_client_config_t websocket_cfg = {
         .uri = relay_uri,
@@ -288,6 +267,7 @@ websocket_relay_task(void *pvParameter)
     esp_websocket_client_start(client);
     char data[64];
     int i = 0;
+
     while (1) {
         if (esp_websocket_client_is_connected(client)) {
           if (strcmp(wss_data_out,"")!=0) {
@@ -297,21 +277,16 @@ websocket_relay_task(void *pvParameter)
 						wss_data_out_ready = false;
 						strcpy(wss_data_out,"");
           }
-					if (!load_message_sent) {
-						strcpy(wss_data_out,load_message);
-						printf("load_message %s\n",load_message);
-						wss_data_out_ready = true;
-						load_message_sent = true;
-					}
         }
-        vTaskDelay(1000 / portTICK_RATE_MS);
+        vTaskDelay(200 / portTICK_RATE_MS);
     }
     esp_websocket_client_stop(client);
     ESP_LOGI(TAG, "Websocket Stopped");
     esp_websocket_client_destroy(client);
 }
 
-static void websocket_utilities_start(void)
+static void
+websocket_utilities_start(void)
 {
     char utilities_uri[100];
     strcpy(utilities_uri, SERVER_URI);
@@ -343,7 +318,8 @@ static void websocket_utilities_start(void)
     esp_websocket_client_destroy(client);
 }
 
-void websocket_main(void)
+void
+websocket_main()
 {
     ESP_LOGI(TAG, "[APP] Startup..");
     ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
@@ -352,25 +328,5 @@ void websocket_main(void)
     esp_log_level_set("WEBSOCKET_CLIENT", ESP_LOG_DEBUG);
     esp_log_level_set("TRANS_TCP", ESP_LOG_DEBUG);
 
-    ESP_ERROR_CHECK(nvs_flash_init());
-
-  	// store_char("token","");
-  	// store_char("device_id","");
-
-		strcpy(device_id,get_char("device_id"));
-		if (strcmp(device_id,"")==0) {
-			websocket_utilities_start();
-		} else {
-			printf("pulled device_id from storage: %s\n", token);
-		}
-
-  	strcpy(token,get_char("token"));
-  	if (strcmp(token,"")==0) {
-  		strcpy(token,device_id);
-  		printf("no token found, setting token as device id: %s\n", token);
-  	} else {
-  		printf("pulled token from storage: %s\n", token);
-  	}
-
-		xTaskCreate(&websocket_relay_task, "websocket_relay_task", 5000, NULL, 5, NULL);
+		xTaskCreate(&websocket_relay_task, "websocket_relay_task", 10000, NULL, 5, NULL);
 }

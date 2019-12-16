@@ -1,4 +1,4 @@
-menu "Server Configuration"
+menu "Server"
 
     config SERVER_URI
         string "Websocket Server"
@@ -8,7 +8,7 @@ menu "Server Configuration"
 
 endmenu
 
-menu "Wifi Configuration"
+menu "Wifi"
 
     config ESP_WIFI_SSID
         string "WiFi SSID"
@@ -29,7 +29,7 @@ menu "Wifi Configuration"
             Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
 endmenu
 
-menu "ds18b20 Configuration"
+menu "Temperature (ds18b20)"
 
 config ONE_WIRE_GPIO
     int "OneWire GPIO number"
@@ -37,6 +37,21 @@ config ONE_WIRE_GPIO
 	default 22
 	help
 		GPIO number (IOxx) to access One Wire Bus.
+
+		Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
+
+		GPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.
+
+endmenu
+
+menu "Switch Configuration"
+
+config SWITCH_IO
+    int "Switch IO number"
+	range 0 34
+	default 25
+	help
+		GPIO number (IOxx) to access switch.
 
 		Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
 

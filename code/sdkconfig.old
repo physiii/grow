@@ -112,7 +112,7 @@ CONFIG_ESPTOOLPY_MONITOR_BAUD=115200
 #
 # Server Configuration
 #
-CONFIG_SERVER_URI="ws://192.168.0.236:5050"
+CONFIG_SERVER_URI="ws://192.168.0.236"
 # end of Server Configuration
 
 #
@@ -126,7 +126,7 @@ CONFIG_ESP_MAXIMUM_RETRY=10
 #
 # ds18b20 Configuration
 #
-CONFIG_ONE_WIRE_GPIO=25
+CONFIG_ONE_WIRE_GPIO=22
 # end of ds18b20 Configuration
 
 #

@@ -17,7 +17,7 @@
 #endif
 
 #define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
-#define NO_OF_SAMPLES   64          //Multisampling
+#define NO_OF_SAMPLES   1000        //Multisampling
 uint32_t ph_reading = 0;
 
 #if CONFIG_IDF_TARGET_ESP32
