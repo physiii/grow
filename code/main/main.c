@@ -34,7 +34,7 @@ void app_main(void)
   ESP_ERROR_CHECK(esp_event_loop_create_default());
 
   snprintf(state_str,sizeof(state_str),""
-  "{\"id\":\"pod_1\", \"light_level\":51, \"uptime\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":10, \"pco2\":4.1}");
+  "{\"light_level\":51, \"uptime\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":10, \"pco2\":4.1}");
   state = cJSON_Parse(state_str);
 
   ESP_ERROR_CHECK(nvs_flash_init());

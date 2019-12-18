@@ -39,7 +39,7 @@ send_state()
 	snprintf(wss_data_out,sizeof(wss_data_out),""
 	"{\"event_type\":\"load\","
 	" \"payload\":{\"services\":["
-	"{\"type\":\"grow-pod\","
+	"{\"id\":\"pod_1\", \"type\":\"grow-pod\","
 	"\"state\":%s"
 	"}]}}", state_str);
 	free(state_str);
