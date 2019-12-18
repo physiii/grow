@@ -18,6 +18,7 @@ char state_str[2000];
 bool connected_to_server = false;
 
 void send_state(void);
+void calibrate_ph(void);
 #include "services/switch.c"
 #include "services/store.c"
 #include "services/websocket.c"
@@ -57,7 +58,7 @@ void app_main(void)
   // xTaskCreate(&websocket_task, "websocket_task", 5000, NULL, 5, NULL);
   // websocket_main();
   xTaskCreate(&websocket_relay_task, "websocket_relay_task", 10000, NULL, 5, NULL);
-  xTaskCreate(&temperature_task, "temperature_service_task", 5000, NULL, 5, NULL);
+  // xTaskCreate(&temperature_task, "temperature_service_task", 5000, NULL, 5, NULL);
   xTaskCreate(&ph_task, "ph_service_task", 5000, NULL, 5, NULL);
 
   int uptime = 0;
@@ -66,7 +67,7 @@ void app_main(void)
     cJSON *number = cJSON_CreateNumber(uptime);
     cJSON_ReplaceItemInObjectCaseSensitive(state,"uptime",number);
     send_state();
-    ESP_LOGI(TAG, "Free memory: %d bytes", esp_get_free_heap_size());
+    // ESP_LOGI(TAG, "Free memory: %d bytes", esp_get_free_heap_size());
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }

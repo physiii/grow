@@ -4,4 +4,5 @@ code/build
 *_autosave*
 *cache.dcm
 *_saved_*
-sdkconfig
+code/sdkconfig
+code/sdkconfig.old

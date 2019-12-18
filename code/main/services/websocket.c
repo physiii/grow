@@ -70,9 +70,32 @@ check_json(char * str)
 	return 1;
 }
 
+void
+handle_settings(cJSON *settings)
+{
+	if (cJSON_GetObjectItem(settings,"calibrate_ph")) {
+		if (cJSON_IsTrue(cJSON_GetObjectItem(settings,"calibrate_ph"))) {
+			calibrate_ph();
+		}
+	}
+}
+
 int
 handle_event(char * event_type)
 {
+
+	if (strcmp(event_type,"settings")==0) {
+		// dimmer_payload = payload;
+		// payload = NULL;
+
+		if (cJSON_GetObjectItem(payload,"settings")) {
+			cJSON *settings = cJSON_GetObjectItem(payload,"settings");
+			handle_settings(settings);
+		}
+		//
+		// send_state();
+		return 1;
+	}
 
   // printf("looking for event type: %s\n",event_type);
 	if (strcmp(event_type,"dimmer")==0) {
@@ -208,6 +231,7 @@ websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event
             break;
 
         case WEBSOCKET_EVENT_DATA:
+						if (data->data_len < 5) break;
             ESP_LOGI(TAG, "WEBSOCKET_EVENT_DATA");
             ESP_LOGI(TAG, "Received opcode=%d", data->op_code);
             ESP_LOGW(TAG, "Received=%.*s\r\n", data->data_len, (char*)data->data_ptr);
