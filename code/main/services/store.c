@@ -3,6 +3,27 @@ char store_service_message[1000];
 bool store_service_message_ready = false;
 cJSON *auth_uids = NULL;
 
+int store_state(cJSON * state)
+{
+  char *state_str = cJSON_PrintUnformatted(state);
+  store_char("state", state_str);
+  free(state_str);
+  return 0;
+}
+
+int restore_state()
+{
+  char state_str[2000];
+  strcpy(state_str, get_char("state"));
+  if (strcmp(state_str,"")==0) {
+    printf("State not found, initializing...\n");
+    snprintf(state_str,sizeof(state_str),""
+    "{\"light_level\":51, \"time\":0, \"cycletime\":0, \"start_time\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":0.000, \"pco2\":4.1}");
+  }
+  state = cJSON_Parse(state_str);
+  return 0;
+}
+
 int store_uids(cJSON * uids)
 {
   printf("Storing UIDs: %s\n",cJSON_PrintUnformatted(uids));

@@ -4,8 +4,8 @@ char ph_service_message[2000];
 char ph_service_message_in[2000];
 bool ph_service_message_ready = false;
 
-float ph_bias = 1801; // 4973
-float PH_SLOPE = 89; // 256
+float ph_bias = 5180; // 4973
+float PH_SLOPE = 292; // 256
 int COUNT_MOD = 10;
 float PH_CAL = 7;
 float avg_value = 0;

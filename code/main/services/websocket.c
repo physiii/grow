@@ -18,10 +18,11 @@ bool wss_data_out_ready = false;
 
 cJSON *payload = NULL;
 bool run = true;
-int current_time = 0;
+bool get_time = true;
 
 char token[1000];
 char device_id[100];
+
 
 static const char *SERVER_URI = CONFIG_SERVER_URI;
 
@@ -76,6 +77,14 @@ handle_settings(cJSON *settings)
 	if (cJSON_GetObjectItem(settings,"calibrate_ph")) {
 		if (cJSON_IsTrue(cJSON_GetObjectItem(settings,"calibrate_ph"))) {
 			calibrate_ph();
+		}
+	}
+
+	if (cJSON_GetObjectItem(settings,"reset_cycletime")) {
+		if (cJSON_IsTrue(cJSON_GetObjectItem(settings,"reset_cycletime"))) {
+			start_time = current_time;
+			cJSON *time_json = cJSON_CreateNumber(start_time);
+			cJSON_ReplaceItemInObjectCaseSensitive(state,"start_time",time_json);
 		}
 	}
 }
@@ -177,7 +186,8 @@ handle_event(char * event_type)
 		current_time = cJSON_GetObjectItem(payload,"time")->valueint;
 		// schedule_payload = payload;
 		// payload = NULL;
-		printf("time: %d\n", current_time);
+		printf("Current Time: %lu\n", current_time);
+		get_time = false;
 		return 1;
 	}
 
@@ -334,7 +344,13 @@ websocket_utilities_task(void *pvParameter)
             ESP_LOGI(TAG, "Sending %s", data);
             esp_websocket_client_send(client, data, len, portMAX_DELAY);
           }
+					if (get_time) {
+						int len = snprintf(data,sizeof(data),"{\"event_type\":\"time\"}");
+						ESP_LOGI(TAG, "Requesting time: %s", data);
+						esp_websocket_client_send(client, data, len, portMAX_DELAY);
+					}
         }
+
         vTaskDelay(1000 / portTICK_RATE_MS);
     }
     esp_websocket_client_stop(client);
