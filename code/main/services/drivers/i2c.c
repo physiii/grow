@@ -61,8 +61,8 @@ char climate_req_str[1024];
 
 float tempature_cf = 429.1;
 float tempature_cb = 17736.5;
-float humidity_cf =  1000;
-float humidity_cb = 0;
+float humidity_cf =  346.2;
+float humidity_cb = 8576.9;
 
 static esp_err_t SI7020_measure_temp(i2c_port_t i2c_num, uint8_t* data_h, uint8_t* data_l)
 {
@@ -169,7 +169,7 @@ static void climate_task(void* arg)
         if (ret == ESP_OK) {
             //printf("temperature: %d\n", ( sensor_data_h << 8 | sensor_data_l ));
             atm_temp = ( sensor_data_h << 8 | sensor_data_l ) - tempature_cb;
-            atm_temp = atm_temp / tempature_cf;
+            atm_temp /= tempature_cf;
             // sprintf(temperature_str,"%d", atm_temp);
             // printf("Atmospheric Temperature: %s\n",temperature_str);
         } else {
@@ -183,7 +183,8 @@ static void climate_task(void* arg)
             //printf("data_h: %02x\n", sensor_data_h);
             //printf("data_l: %02x\n", sensor_data_l);
             //printf("humidity: %d\n", ( sensor_data_h << 8 | sensor_data_l ));
-            humidity = ( sensor_data_h << 8 | sensor_data_l ) * humidity_cf / 1000 + humidity_cb;
+            humidity = ( sensor_data_h << 8 | sensor_data_l ) - humidity_cb;
+            humidity /= humidity_cf;
             // sprintf(humidity_str,"%d", humidity);
             // printf("atmironment Humidity: %s\n",humidity_str);
         } else {
