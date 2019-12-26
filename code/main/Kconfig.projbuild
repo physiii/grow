@@ -183,3 +183,60 @@ menu "I2C Configuration"
     endmenu
 
 endmenu
+
+menu "Thermostat"
+
+    config CONTROL_NEG_IO
+      int "PEC Negative Terminal IO"
+      default 22
+      help
+          IO for negative terminal on thermocooler.
+
+    config CONTROL_POS_IO
+      int "PEC Positive Terminal IO"
+      default 23
+      help
+          IO for positive terminal on thermocooler.
+endmenu
+
+menu "pH Control"
+
+    config ACID_PUMP_IO
+      int "Acid Pump IO"
+      default 22
+      help
+          IO for acid pump to lower pH.
+
+    config BASE_PUMP_IO
+      int "Base Pump IO"
+      default 23
+      help
+          IO for base pump to raise pH.
+endmenu
+
+menu "Electric Conductivity"
+
+    config EC_SUPPLY_IO
+      int "IO Used For Supply Power Measurement"
+      default 22
+      help
+          IO Used For Supply Power For Measurement.
+
+    config EC_ADC_IO
+      int "ADC Channel Used For Measurement"
+      default 23
+      help
+          ADC Channel Used For Measurement.
+
+    config NUTRIENT_PUMP_IO
+      int "IO Used For Nutrient Pump"
+      default 23
+      help
+          IO Used For Nutrient Pump.
+
+    config WATER_PUMP_IO
+      int "IO Used For Water Pump"
+      default 23
+      help
+          IO Used For Water Pump.
+endmenu

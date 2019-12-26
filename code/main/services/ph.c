@@ -1,47 +1,142 @@
 #include "drivers/adc.c"
 
-char ph_service_message[2000];
-char ph_service_message_in[2000];
-bool ph_service_message_ready = false;
-
 float ph_bias = 5180; // 4973
 float PH_SLOPE = 292; // 256
 int COUNT_MOD = 10;
 float PH_CAL = 7;
+float PH_SET_POINT = 5.8;
+float PH_WINDOW = 0.5;
+int PH_ADJUST_DELAY = 60 * 1000;
 float avg_value = 0;
+bool ph_timer_expired = true;
+int ph_count = 0;
+int cnt = 0;
+bool raising_ph = false;
+bool lowering_ph = false;
+uint32_t previous_ph_reading = 0;
+float sum_value = 0;
 
-void calibrate_ph() {
+struct ph_controller
+{
+  int base_pump_io;
+  int acid_pump_io;
+  float value;
+  float set_value;
+  float min_value;
+  float max_value;
+};
+
+struct ph_controller ph;
+
+void
+start_ph_timer(bool val)
+{
+  if (val) {
+    ph_timer_expired = false;
+    ph_count = 0;
+  } else {
+    ph_timer_expired = true;
+  }
+}
+
+static void
+ph_timer(void *pvParameter)
+{
+  while (1) {
+    if (ph_count >= PH_ADJUST_DELAY && !ph_timer_expired) {
+      ph_timer_expired = true;
+    } else ph_count++;
+    vTaskDelay(60 * 1000 / portTICK_PERIOD_MS);
+  }
+}
+
+void
+lower_ph ()
+{
+  if (!ph_timer_expired) return;
+  start_ph_timer(true);
+  raising_ph = false;
+  lowering_ph = true;
+  gpio_set_level(CONFIG_ACID_PUMP_IO, true);
+  ESP_LOGI(TAG, "Lowering PH to: %f", ph.set_value);
+}
+
+void
+raise_ph ()
+{
+  if (!ph_timer_expired) return;
+  start_ph_timer(true);
+  raising_ph = false;
+  lowering_ph = true;
+  gpio_set_level(CONFIG_BASE_PUMP_IO, true);
+  ESP_LOGI(TAG, "Raising PH to: %f", ph.set_value);
+}
+
+void
+stop_ph ()
+{
+  raising_ph = false;
+  lowering_ph = false;
+  gpio_set_level(CONFIG_NUTRIENT_PUMP_IO, false);
+  gpio_set_level(CONFIG_WATER_PUMP_IO, false);
+  ESP_LOGI(TAG, "Set Point Reached: %f", ph.set_value);
+}
+
+void
+calibrate_ph()
+{
   ph_bias = PH_CAL * PH_SLOPE + avg_value;
   printf("[handle_settings] calibrating ph...%f\n", ph_bias);
+}
+
+void
+check_ph_state()
+{
+  if (ph.value < ph.min_value) {
+    raise_ph();
+  }
+  if (ph.value  < ph.max_value) {
+    lower_ph();
+  }
+  if (lowering_ph && ph.value < ph.set_value) {
+    stop_ph();
+  }
+  if (raising_ph && ph.value > ph.set_value) {
+    stop_ph();
+  }
+
+  if (ph_reading!=previous_ph_reading) {
+      float ph_value = (ph_bias - ph_reading)/PH_SLOPE;
+      cJSON *number = cJSON_CreateNumber(ph_value);
+      cJSON_ReplaceItemInObjectCaseSensitive(state,"ph",number);
+      // send_state();
+      // previous_ph_reading = ph_reading;
+      sum_value+=ph_reading;
+      printf("Reading: %u\tValue: %f\n",ph_reading,ph_value);
+      cnt++;
+  }
+
+  if ((cnt % COUNT_MOD)==0) {
+    avg_value = sum_value / COUNT_MOD;
+    printf("! --- Average Reading: %f --- !\n",avg_value);
+    sum_value = 0;
+  }
+  previous_ph_reading = ph.value;
 }
 
 static void
 ph_task(void *pvParameter)
 {
-  float temp = 0;
+  ph.set_value = PH_SET_POINT;
+  ph.min_value = ph.set_value - PH_WINDOW / 2;
+  ph.max_value = ph.set_value + PH_WINDOW / 2;
+  ph.value = 0;
+  xTaskCreate(ph_timer, "ph_timer", 2048, NULL, 10, NULL);
   xTaskCreate(&adc_task, "adc_service_task", 5000, NULL, 5, NULL);
 
-  uint32_t previous_ph_reading = 0;
-  float sum_value = 0;
-  int cnt = 0;
   while (1) {
     //outgoing messages to other services
-    if (ph_reading!=previous_ph_reading) {
-        float ph_value = (ph_bias - ph_reading)/PH_SLOPE;
-        cJSON *number = cJSON_CreateNumber(ph_value);
-        cJSON_ReplaceItemInObjectCaseSensitive(state,"ph",number);
-        // send_state();
-        previous_ph_reading = ph_reading;
-        sum_value+=ph_reading;
-        printf("Reading: %u\tValue: %f\n",ph_reading,ph_value);
-        cnt++;
-    }
-
-    if ((cnt % COUNT_MOD)==0) {
-      avg_value = sum_value / COUNT_MOD;
-      printf("! --- Average Reading: %f --- !\n",avg_value);
-      sum_value = 0;
-    }
+    check_ph_state();
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
