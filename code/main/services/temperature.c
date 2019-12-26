@@ -63,7 +63,7 @@ check_thermostat()
   if (water_temp < ts.min_temp) {
     raise_temp();
   }
-  if (water_temp < ts.max_temp) {
+  if (water_temp > ts.max_temp) {
     lower_temp();
   }
   if (lowering_temp && water_temp < TEMP_SET_POINT) {

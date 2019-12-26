@@ -84,7 +84,7 @@ check_ec_state()
   if (ec.value < ec.min_value) {
     raise_ec();
   }
-  if (ec.value  < ec.max_value) {
+  if (ec.value  > ec.max_value) {
     lower_ec();
   }
   if (lowering_ec && ec.value < EC_SET_POINT) {

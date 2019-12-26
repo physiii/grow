@@ -1,5 +1,3 @@
-#include "drivers/adc.c"
-
 float ph_bias = 5180; // 4973
 float PH_SLOPE = 292; // 256
 int COUNT_MOD = 10;
@@ -13,7 +11,6 @@ int ph_count = 0;
 int cnt = 0;
 bool raising_ph = false;
 bool lowering_ph = false;
-uint32_t previous_ph_reading = 0;
 float sum_value = 0;
 
 struct ph_controller
@@ -21,12 +18,15 @@ struct ph_controller
   int base_pump_io;
   int acid_pump_io;
   float value;
+  float prev_value;
   float set_value;
   float min_value;
   float max_value;
 };
 
 struct ph_controller ph;
+
+#include "drivers/adc.c"
 
 void
 start_ph_timer(bool val)
@@ -95,7 +95,7 @@ check_ph_state()
   if (ph.value < ph.min_value) {
     raise_ph();
   }
-  if (ph.value  < ph.max_value) {
+  if (ph.value  > ph.max_value) {
     lower_ph();
   }
   if (lowering_ph && ph.value < ph.set_value) {
@@ -105,23 +105,19 @@ check_ph_state()
     stop_ph();
   }
 
-  if (ph_reading!=previous_ph_reading) {
-      float ph_value = (ph_bias - ph_reading)/PH_SLOPE;
-      cJSON *number = cJSON_CreateNumber(ph_value);
+  if (ph.value!=ph.prev_value) {
+      cJSON *number = cJSON_CreateNumber(ph.value);
       cJSON_ReplaceItemInObjectCaseSensitive(state,"ph",number);
-      // send_state();
-      // previous_ph_reading = ph_reading;
-      sum_value+=ph_reading;
-      printf("Reading: %u\tValue: %f\n",ph_reading,ph_value);
+      sum_value+=ph.value;
       cnt++;
   }
 
   if ((cnt % COUNT_MOD)==0) {
     avg_value = sum_value / COUNT_MOD;
-    printf("! --- Average Reading: %f --- !\n",avg_value);
+    // printf("! --- Average Reading: %f --- !\n",avg_value);
     sum_value = 0;
   }
-  previous_ph_reading = ph.value;
+  ph.prev_value = ph.value;
 }
 
 static void

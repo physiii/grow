@@ -186,30 +186,30 @@ endmenu
 
 menu "Thermostat"
 
-    config CONTROL_NEG_IO
-      int "PEC Negative Terminal IO"
-      default 22
-      help
-          IO for negative terminal on thermocooler.
-
     config CONTROL_POS_IO
       int "PEC Positive Terminal IO"
       default 23
       help
           IO for positive terminal on thermocooler.
+
+    config CONTROL_NEG_IO
+      int "PEC Negative Terminal IO"
+      default 14
+      help
+          IO for negative terminal on thermocooler.
 endmenu
 
 menu "pH Control"
 
     config ACID_PUMP_IO
       int "Acid Pump IO"
-      default 22
+      default 25
       help
           IO for acid pump to lower pH.
 
     config BASE_PUMP_IO
       int "Base Pump IO"
-      default 23
+      default 26
       help
           IO for base pump to raise pH.
 endmenu
@@ -228,15 +228,16 @@ menu "Electric Conductivity"
       help
           ADC Channel Used For Measurement.
 
+    config WATER_PUMP_IO
+      int "IO Used For Water Pump"
+      default 12
+      help
+          IO Used For Water Pump.
+
     config NUTRIENT_PUMP_IO
       int "IO Used For Nutrient Pump"
-      default 23
+      default 13
       help
           IO Used For Nutrient Pump.
 
-    config WATER_PUMP_IO
-      int "IO Used For Water Pump"
-      default 23
-      help
-          IO Used For Water Pump.
 endmenu
