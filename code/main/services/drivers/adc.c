@@ -103,8 +103,7 @@ adc_task(void *pvParameter)
 #elif CONFIG_IDF_TARGET_ESP32S2BETA
         // printf("ADC%d CH%d Raw: %d\t\n", unit, channel, adc_reading);
 #endif
-        // ph_reading = adc_reading;
-        ph.value = (ph_bias - adc_reading)/PH_SLOPE;
+        ph.reading = adc_reading;
         vTaskDelay(pdMS_TO_TICKS(1000));
 
     }

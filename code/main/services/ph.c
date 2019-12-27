@@ -17,8 +17,9 @@ struct ph_controller
 {
   int base_pump_io;
   int acid_pump_io;
+  int reading;
+  int prev_reading;
   float value;
-  float prev_value;
   float set_value;
   float min_value;
   float max_value;
@@ -105,19 +106,20 @@ check_ph_state()
     stop_ph();
   }
 
-  if (ph.value!=ph.prev_value) {
+  if (ph.reading!=ph.prev_reading) {
+      ph.value = (ph_bias - ph.reading)/PH_SLOPE;
       cJSON *number = cJSON_CreateNumber(ph.value);
       cJSON_ReplaceItemInObjectCaseSensitive(state,"ph",number);
-      sum_value+=ph.value;
+      sum_value+=ph.reading;
       cnt++;
   }
 
   if ((cnt % COUNT_MOD)==0) {
     avg_value = sum_value / COUNT_MOD;
-    // printf("! --- Average Reading: %f --- !\n",avg_value);
+    printf("! --- Average Reading: %f --- !\n",avg_value);
     sum_value = 0;
   }
-  ph.prev_value = ph.value;
+  ph.prev_reading = ph.reading;
 }
 
 static void
