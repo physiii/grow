@@ -305,7 +305,7 @@ websocket_relay_task(void *pvParameter)
     while (1) {
         if (esp_websocket_client_is_connected(client)) {
           if (strcmp(wss_data_out,"")!=0) {
-            int len = sizeof(wss_data_out);
+            int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
             ESP_LOGI(TAG, "Sending %s", wss_data_out);
             esp_websocket_client_send(client, wss_data_out, len, portMAX_DELAY);
 						wss_data_out_ready = false;
