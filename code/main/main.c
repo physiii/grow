@@ -68,7 +68,7 @@ void app_main(void)
     printf("pulled token from storage: %s\n", token);
   }
 
-  // xTaskCreate(&switch_task, "switch_task", 5000, NULL, 5, NULL);
+  xTaskCreate(&switch_task, "switch_task", 5000, NULL, 5, NULL);
   station_main();
   // xTaskCreate(&websocket_task, "websocket_task", 5000, NULL, 5, NULL);
   // websocket_main();

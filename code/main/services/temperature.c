@@ -9,13 +9,16 @@ float previous_atm_temp = 0;
 float previous_water_temp = 0;
 float previous_humidity = 0;
 
+bool THERM_INVERT_IO = CONFIG_THERM_INVERT_IO;
+
+float TEMP_SET_POINT = CONFIG_TEMP_SET_POINT;
 float TEMP_WINDOW = 1.0;
-float TEMP_SET_POINT = 19;
 
 struct thermostat
 {
   int control_pos_io;
   int control_neg_io;
+  bool invert_io;
   float temp;
   float set_temp;
   float min_temp;
@@ -30,46 +33,51 @@ struct thermostat ts;
 void
 lower_temp ()
 {
+  if (lowering_temp) return;
   raising_temp = false;
   lowering_temp = true;
-  gpio_set_level(CONFIG_CONTROL_NEG_IO, true);
-  gpio_set_level(CONFIG_CONTROL_POS_IO, false);
-  ESP_LOGI(TAG, "Lowering temperature to: %f", TEMP_SET_POINT);
+  gpio_set_level(ts.control_neg_io, true);
+  gpio_set_level(ts.control_pos_io, false);
+  ESP_LOGI(TAG, "Lowering temperature to: %f\t", TEMP_SET_POINT);
 }
 
 void
 raise_temp ()
 {
+  if (raising_temp) return;
   raising_temp = true;
   lowering_temp = false;
-  gpio_set_level(CONFIG_CONTROL_NEG_IO, false);
-  gpio_set_level(CONFIG_CONTROL_POS_IO, true);
-  ESP_LOGI(TAG, "Raising temperature to: %f", TEMP_SET_POINT);
+  gpio_set_level(ts.control_neg_io, false);
+  gpio_set_level(ts.control_pos_io, true);
+  ESP_LOGI(TAG, "(min: %f) Raising temperature %f to %f", ts.min_temp, ts.temp, TEMP_SET_POINT);
 }
 
 void
 stop_temp ()
 {
+  if (!raising_temp && !lowering_temp) return;
   raising_temp = false;
   lowering_temp = false;
-  gpio_set_level(CONFIG_CONTROL_NEG_IO, false);
-  gpio_set_level(CONFIG_CONTROL_POS_IO, false);
+  gpio_set_level(ts.control_neg_io, false);
+  gpio_set_level(ts.control_pos_io, false);
   ESP_LOGI(TAG, "Set Point Reached: %f", TEMP_SET_POINT);
 }
 
 void
 check_thermostat()
 {
-  if (water_temp < ts.min_temp) {
+  if (ts.temp == 0) return;
+
+  if (ts.temp < ts.min_temp) {
     raise_temp();
   }
-  if (water_temp > ts.max_temp) {
+  if (ts.temp > ts.max_temp) {
     lower_temp();
   }
-  if (lowering_temp && water_temp < TEMP_SET_POINT) {
+  if (lowering_temp && ts.temp < TEMP_SET_POINT) {
     stop_temp();
   }
-  if (raising_temp && water_temp > TEMP_SET_POINT) {
+  if (raising_temp && ts.temp > TEMP_SET_POINT) {
     stop_temp();
   }
 }
@@ -89,10 +97,11 @@ check_temp_state()
       previous_humidity = humidity;
   }
 
-  if (water_temp!=previous_water_temp) {
-      cJSON *number = cJSON_CreateNumber(water_temp);
+  if (ts.temp!=previous_water_temp) {
+      check_thermostat();
+      cJSON *number = cJSON_CreateNumber(ts.temp);
       cJSON_ReplaceItemInObjectCaseSensitive(state,"water_temp",number);
-      previous_water_temp = water_temp;
+      previous_water_temp = ts.temp;
   }
 }
 
@@ -104,15 +113,19 @@ temperature_task(void *pvParameter)
   i2c_main();
   float previous_water_temp = 0;
 
-  ts.control_neg_io = CONFIG_CONTROL_NEG_IO;
-  ts.control_pos_io = CONFIG_CONTROL_POS_IO;
+  if (THERM_INVERT_IO) {
+    ts.control_pos_io = CONTROL_NEG_IO;
+    ts.control_neg_io = CONTROL_POS_IO;
+  } else {
+    ts.control_neg_io = CONTROL_NEG_IO;
+    ts.control_pos_io = CONTROL_POS_IO;
+  }
   ts.set_temp = TEMP_SET_POINT;
   ts.min_temp = ts.set_temp - TEMP_WINDOW / 2;
   ts.max_temp = ts.set_temp + TEMP_WINDOW / 2;
 
   while (1) {
     check_temp_state();
-    check_thermostat();
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }

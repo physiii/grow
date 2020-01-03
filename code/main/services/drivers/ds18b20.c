@@ -188,7 +188,7 @@ void ds18b20_main()
                 }
 
                 // printf("  %d: %.1f    %d errors\n", i, readings[i], errors_count[i]);
-                water_temp = readings[0];
+                if (readings[0] != 0) ts.temp = readings[0];
             }
 
             vTaskDelayUntil(&last_wake_time, SAMPLE_PERIOD / portTICK_PERIOD_MS);

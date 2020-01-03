@@ -116,7 +116,7 @@ check_ph_state()
 
   if ((cnt % COUNT_MOD)==0) {
     avg_value = sum_value / COUNT_MOD;
-    printf("! --- Average Reading: %f --- !\n",avg_value);
+    // printf("! --- Average Reading: %f --- !\n",avg_value);
     sum_value = 0;
   }
   ph.prev_reading = ph.reading;

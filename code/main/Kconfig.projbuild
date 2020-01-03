@@ -8,6 +8,94 @@ menu "Server"
 
 endmenu
 
+menu "Thermostat"
+
+    config ONE_WIRE_GPIO
+        int "Sensor IO (ds18b20)"
+    	range 0 34
+    	default 22
+    	help
+    		GPIO number (IOxx) to access One Wire Bus.
+
+    		Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
+
+    		GPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.
+
+    config TEMP_SET_POINT
+      int "Target Water Temperature"
+      default 19
+      help
+          Target temparture.
+
+    config THERM_INVERT_IO
+      int "Invert Heat/Cool IO"
+      default 0
+      help
+          Invert IO for heat/cool.
+
+    config CONTROL_POS_IO
+      int "PEC Positive Terminal IO"
+      default 25
+      help
+          IO for positive terminal on thermocooler.
+
+    config CONTROL_NEG_IO
+      int "PEC Negative Terminal IO"
+      default 26
+      help
+          IO for negative terminal on thermocooler.
+endmenu
+
+menu "pH Control"
+
+    config PH_ADC_CHANNEL
+      int "ADC Channel Used For Measurement"
+      default 6
+      help
+          ADC Channel Used For Measurement.
+
+    config ACID_PUMP_IO
+      int "Acid Pump IO"
+      default 25
+      help
+          IO for acid pump to lower pH.
+
+    config BASE_PUMP_IO
+      int "Base Pump IO"
+      default 26
+      help
+          IO for base pump to raise pH.
+endmenu
+
+menu "Electric Conductivity"
+
+    config EC_SUPPLY_IO
+      int "IO Used For Supply Power Measurement"
+      default 22
+      help
+          IO Used For Supply Power For Measurement.
+
+    config EC_ADC_CHANNEL
+      int "ADC Channel Used For Measurement"
+      default 6
+      help
+          ADC Channel Used For Measurement.
+
+    config WATER_PUMP_IO
+      int "IO Used For Water Pump"
+      default 12
+      help
+          IO Used For Water Pump.
+
+    config NUTRIENT_PUMP_IO
+      int "IO Used For Nutrient Pump"
+      default 13
+      help
+          IO Used For Nutrient Pump.
+
+endmenu
+
+
 menu "Wifi"
 
     config ESP_WIFI_SSID
@@ -27,21 +115,6 @@ menu "Wifi"
         default 5
         help
             Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
-endmenu
-
-menu "Temperature (ds18b20)"
-
-config ONE_WIRE_GPIO
-    int "OneWire GPIO number"
-	range 0 34
-	default 22
-	help
-		GPIO number (IOxx) to access One Wire Bus.
-
-		Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
-
-		GPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.
-
 endmenu
 
 menu "Switch Configuration"
@@ -181,63 +254,5 @@ menu "I2C Configuration"
             default 0x23 if BH1750_ONETIME_L_RESOLUTION
 
     endmenu
-
-endmenu
-
-menu "Thermostat"
-
-    config CONTROL_POS_IO
-      int "PEC Positive Terminal IO"
-      default 23
-      help
-          IO for positive terminal on thermocooler.
-
-    config CONTROL_NEG_IO
-      int "PEC Negative Terminal IO"
-      default 14
-      help
-          IO for negative terminal on thermocooler.
-endmenu
-
-menu "pH Control"
-
-    config ACID_PUMP_IO
-      int "Acid Pump IO"
-      default 25
-      help
-          IO for acid pump to lower pH.
-
-    config BASE_PUMP_IO
-      int "Base Pump IO"
-      default 26
-      help
-          IO for base pump to raise pH.
-endmenu
-
-menu "Electric Conductivity"
-
-    config EC_SUPPLY_IO
-      int "IO Used For Supply Power Measurement"
-      default 22
-      help
-          IO Used For Supply Power For Measurement.
-
-    config EC_ADC_IO
-      int "ADC Channel Used For Measurement"
-      default 23
-      help
-          ADC Channel Used For Measurement.
-
-    config WATER_PUMP_IO
-      int "IO Used For Water Pump"
-      default 12
-      help
-          IO Used For Water Pump.
-
-    config NUTRIENT_PUMP_IO
-      int "IO Used For Nutrient Pump"
-      default 13
-      help
-          IO Used For Nutrient Pump.
 
 endmenu
