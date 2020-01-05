@@ -269,7 +269,7 @@ websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event
             if (res == 0) printf("event_type not found\n");
             if (res == -1) {
               printf("Reconnecting...\n");
-              run = false;
+              // run = false;
             }
             break;
       case WEBSOCKET_EVENT_ERROR:
@@ -290,8 +290,18 @@ websocket_relay_task(void *pvParameter)
 		}
     ESP_LOGI(TAG, "Connecting to %s...", relay_uri);
 
+
+    char headers[1500];
+    snprintf(headers, sizeof(headers),
+		"x-device-id: %s\r\n"
+		"x-device-type: generic\r\n"
+		"x-device-token: %s\r\n",
+		device_id,
+		token);
+
     const esp_websocket_client_config_t websocket_cfg = {
         .uri = relay_uri,
+				.headers = headers,
     };
 
     esp_websocket_client_handle_t client = esp_websocket_client_init(&websocket_cfg);
@@ -303,11 +313,11 @@ websocket_relay_task(void *pvParameter)
     int i = 0;
 
     while (1) {
-        if (esp_websocket_client_is_connected(client)) {
+        if (esp_websocket_client_is_connected(client) && strcmp(token,"")!=0) {
           if (strcmp(wss_data_out,"")!=0) {
-            int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
+            // int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
             // ESP_LOGI(TAG, "Sending %s", wss_data_out);
-            esp_websocket_client_send(client, wss_data_out, len, portMAX_DELAY);
+            esp_websocket_client_send(client, wss_data_out, sizeof(wss_data_out), portMAX_DELAY);
 						wss_data_out_ready = false;
 						strcpy(wss_data_out,"");
           }

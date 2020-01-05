@@ -13,9 +13,6 @@
 
 static const char *TAG = "TRANSPORT_WS";
 
-char token[1000];
-char device_id[100];
-
 #define DEFAULT_WS_BUFFER (1024)
 #define WS_FIN            0x80
 #define WS_OPCODE_TEXT    0x01
