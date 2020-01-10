@@ -17,25 +17,19 @@ char wss_data_out[2000];
 bool wss_data_out_ready = false;
 
 cJSON *payload = NULL;
-bool run = true;
+bool run_relay = true;
 bool get_time = true;
 
-char token[1000];
+char token[700];
 char device_id[100];
-
+bool disconnect_from_relay = false;
+bool connect_to_relay = true;
 
 static const char *SERVER_URI = CONFIG_SERVER_URI;
 
 void
 send_state()
 {
-	// snprintf(wss_data_out,sizeof(wss_data_out),""
-	// "{\"event_type\":\"load\","
-	// " \"payload\":{\"services\":["
-	// "{\"type\":\"grow-pod\","
-	// "\"state\":{\"id\":\"pod_1\", \"light_level\":51, \"uptime\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":10, \"pco2\":4.1}"
-	// "}]}}");
-
 	char *state_str = cJSON_PrintUnformatted(state);
 	snprintf(wss_data_out,sizeof(wss_data_out),""
 	"{\"event_type\":\"load\","
@@ -167,7 +161,7 @@ handle_event(char * event_type)
 		snprintf(token,sizeof(token),"%s",cJSON_GetObjectItem(payload,"token")->valuestring);
 		printf("token received: %s\n", token);
 		store_char("token",token);
-		return 1;
+		return -1;
 	}
 
 	if (strcmp(event_type,"reconnect-to-relay")==0) {
@@ -269,7 +263,7 @@ websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event
             if (res == 0) printf("event_type not found\n");
             if (res == -1) {
               printf("Reconnecting...\n");
-              // run = false;
+							connect_to_relay = true;
             }
             break;
       case WEBSOCKET_EVENT_ERROR:
@@ -290,43 +284,51 @@ websocket_relay_task(void *pvParameter)
 		}
     ESP_LOGI(TAG, "Connecting to %s...", relay_uri);
 
+    char headers[900];
 
-    char headers[1500];
-    snprintf(headers, sizeof(headers),
-		"x-device-id: %s\r\n"
-		"x-device-type: generic\r\n"
-		"x-device-token: %s\r\n",
-		device_id,
-		token);
-
-    const esp_websocket_client_config_t websocket_cfg = {
-        .uri = relay_uri,
-				.headers = headers,
-    };
-
-    esp_websocket_client_handle_t client = esp_websocket_client_init(&websocket_cfg);
-
-    esp_websocket_register_events(client, WEBSOCKET_EVENT_ANY, websocket_event_handler, (void *)client);
-
-    esp_websocket_client_start(client);
-    char data[64];
-    int i = 0;
+		esp_websocket_client_handle_t client = NULL;
 
     while (1) {
-        if (esp_websocket_client_is_connected(client) && strcmp(token,"")!=0) {
-          if (strcmp(wss_data_out,"")!=0) {
-            // int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
-            // ESP_LOGI(TAG, "Sending %s", wss_data_out);
-            esp_websocket_client_send(client, wss_data_out, sizeof(wss_data_out), portMAX_DELAY);
-						wss_data_out_ready = false;
-						strcpy(wss_data_out,"");
-          }
+
+			if (connect_to_relay) {
+				connect_to_relay = false;
+				snprintf(headers, sizeof(headers),
+				"x-device-id: %s\r\n"
+				"x-device-token: %s\r\n"
+				"x-device-type: generic\r\n",
+				device_id,
+				token);
+
+				printf("Sending headers: %s\n",headers);
+		    const esp_websocket_client_config_t websocket_cfg = {
+		        .uri = relay_uri,
+						.headers = headers,
+		    };
+
+		    client = esp_websocket_client_init(&websocket_cfg);
+		    esp_websocket_register_events(client, WEBSOCKET_EVENT_ANY, websocket_event_handler, (void *)client);
+		    esp_websocket_client_start(client);
+			}
+
+			if (disconnect_from_relay) {
+				esp_websocket_client_stop(client);
+		    ESP_LOGI(TAG, "Websocket Stopped");
+		    esp_websocket_client_destroy(client);
+				connect_to_relay = true;
+				disconnect_from_relay = false;
+			}
+
+      if (esp_websocket_client_is_connected(client) && strcmp(token,"")!=0) {
+        if (strcmp(wss_data_out,"")!=0) {
+          // int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
+          // ESP_LOGI(TAG, "Sending %s", wss_data_out);
+          esp_websocket_client_send(client, wss_data_out, sizeof(wss_data_out), portMAX_DELAY);
+					wss_data_out_ready = false;
+					strcpy(wss_data_out,"");
         }
-        vTaskDelay(200 / portTICK_RATE_MS);
+      }
+      vTaskDelay(200 / portTICK_RATE_MS);
     }
-    esp_websocket_client_stop(client);
-    ESP_LOGI(TAG, "Websocket Stopped");
-    esp_websocket_client_destroy(client);
 }
 
 static void
@@ -335,7 +337,11 @@ websocket_utilities_task(void *pvParameter)
     char utilities_uri[100];
     strcpy(utilities_uri, SERVER_URI);
     strcat(utilities_uri, "/utilities");
-    ESP_LOGI(TAG, "Connectiong to %s...", utilities_uri);
+		while (!connected_to_server) {
+			ESP_LOGI(TAG, "Waiting for IP...");
+			vTaskDelay(1000 / portTICK_RATE_MS);
+		}
+    ESP_LOGI(TAG, "Connecting to %s...", utilities_uri);
 
     const esp_websocket_client_config_t websocket_cfg = {
         .uri = utilities_uri,
@@ -343,25 +349,23 @@ websocket_utilities_task(void *pvParameter)
 
     esp_websocket_client_handle_t client = esp_websocket_client_init(&websocket_cfg);
     esp_websocket_register_events(client, WEBSOCKET_EVENT_ANY, websocket_event_handler, (void *)client);
-
     esp_websocket_client_start(client);
     char data[64];
     int i = 0;
-    while (run) {
-        if (esp_websocket_client_is_connected(client)) {
-          if (strcmp(device_id,"")==0) {
-            int len = snprintf(data,sizeof(data),"{\"event_type\":\"generate-uuid\"}");
-            ESP_LOGI(TAG, "Sending %s", data);
-            esp_websocket_client_send(client, data, len, portMAX_DELAY);
-          }
-					if (get_time) {
-						int len = snprintf(data,sizeof(data),"{\"event_type\":\"time\"}");
-						ESP_LOGI(TAG, "Requesting time: %s", data);
-						esp_websocket_client_send(client, data, len, portMAX_DELAY);
-					}
+    while (1) {
+      if (esp_websocket_client_is_connected(client)) {
+        if (strcmp(device_id,"")==0) {
+          int len = snprintf(data,sizeof(data),"{\"event_type\":\"generate-uuid\"}");
+          ESP_LOGI(TAG, "Sending %s", data);
+          esp_websocket_client_send(client, data, len, portMAX_DELAY);
         }
-
-        vTaskDelay(1000 / portTICK_RATE_MS);
+				if (get_time) {
+					int len = snprintf(data,sizeof(data),"{\"event_type\":\"time\"}");
+					ESP_LOGI(TAG, "Requesting time: %s", data);
+					esp_websocket_client_send(client, data, len, portMAX_DELAY);
+				}
+      }
+      vTaskDelay(1000 / portTICK_RATE_MS);
     }
     esp_websocket_client_stop(client);
     ESP_LOGI(TAG, "Websocket Stopped");

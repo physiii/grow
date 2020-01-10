@@ -18,7 +18,7 @@ int restore_state()
   if (strcmp(state_str,"")==0) {
     printf("State not found, initializing...\n");
     snprintf(state_str,sizeof(state_str),""
-    "{\"light_level\":51, \"time\":0, \"cycletime\":0, \"start_time\":0, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":0.000, \"pco2\":4.1}");
+    "{\"light_level\":51, \"time\":1, \"cycletime\":1, \"start_time\":1, \"on\":false, \"ph\":2.1, \"atm_temp\":75, \"humidity\":90, \"water_temp\":75, \"ec\":0.000, \"pco2\":4.1}");
   }
   state = cJSON_Parse(state_str);
   return 0;
