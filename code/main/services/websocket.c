@@ -12,8 +12,8 @@
 #include "esp_websocket_client.h"
 #include "esp_event.h"
 
-char wss_data_in[2000];
-char wss_data_out[2000];
+char wss_data_in[1800];
+char wss_data_out[1800];
 bool wss_data_out_ready = false;
 
 cJSON *payload = NULL;
@@ -161,7 +161,7 @@ handle_event(char * event_type)
 		snprintf(token,sizeof(token),"%s",cJSON_GetObjectItem(payload,"token")->valuestring);
 		printf("token received: %s\n", token);
 		store_char("token",token);
-		return -1;
+		return 1;
 	}
 
 	if (strcmp(event_type,"reconnect-to-relay")==0) {
@@ -188,33 +188,38 @@ handle_event(char * event_type)
 	if (cJSON_GetObjectItem(payload,"uuid")) {
 		snprintf(device_id,sizeof(device_id),"%s",cJSON_GetObjectItem(payload,"uuid")->valuestring);
 		store_char("device_id",device_id);
-		return -1;
+		return 1;
 	}
 	return 0;
 }
 
 int
-utility_event_handler(cJSON * root)
+ws_event_handler(cJSON * root)
 {
 	char uuid[100];
+	char event_type[500];
+	char callback[70];
+
+	if (cJSON_GetObjectItem(root,"payload")) {
+		payload = cJSON_GetObjectItemCaseSensitive(root,"payload");
+	} else {
+		ESP_LOGW(TAG, "payload key not found");
+		return 0;
+	}
+
+	// Reply with callback
+	if (cJSON_GetObjectItemCaseSensitive(root,"id")) {
+		int callback_id = cJSON_GetObjectItemCaseSensitive(root,"id")->valueint;
+		snprintf(callback,sizeof(callback),"{\"id\":%d,\"callback\":true,\"payload\":[false,\"\"]}",callback_id);
+		strcpy(wss_data_out,callback);
+		wss_data_out_ready = true;
+	}
 
   if (cJSON_GetObjectItem(root,"event_type")) {
-  char event_type[500];
-  snprintf(event_type,sizeof(event_type),"%s",cJSON_GetObjectItem(root,"event_type")->valuestring);
-  payload = cJSON_GetObjectItemCaseSensitive(root,"payload");
+	  snprintf(event_type,sizeof(event_type),"%s",cJSON_GetObjectItem(root,"event_type")->valuestring);
+	  return handle_event(event_type);
+  }
 
-  // Reply with callback
-  if (cJSON_GetObjectItemCaseSensitive(root,"id")) {
-    int callback_id = cJSON_GetObjectItemCaseSensitive(root,"id")->valueint;
-    char callback[70];
-    snprintf(callback,sizeof(callback),"{\"id\":%d,\"callback\":true,\"payload\":[false,\"\"]}",callback_id);
-    strcpy(wss_data_out,callback);
-    wss_data_out_ready = true;
-  }
-  return handle_event(event_type);
-  } else if (cJSON_GetObjectItem(root,"payload")) {
-		payload = cJSON_GetObjectItemCaseSensitive(root,"payload");
-  }
   return handle_event(payload);
 }
 
@@ -259,12 +264,13 @@ websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t event
               printf("invalid incoming json\n");
               break;
             }
-            int res = utility_event_handler(root);
+            int res = ws_event_handler(root);
             if (res == 0) printf("event_type not found\n");
             if (res == -1) {
               printf("Reconnecting...\n");
 							connect_to_relay = true;
             }
+
             break;
       case WEBSOCKET_EVENT_ERROR:
           ESP_LOGI(TAG, "WEBSOCKET_EVENT_ERROR");
@@ -299,7 +305,6 @@ websocket_relay_task(void *pvParameter)
 				device_id,
 				token);
 
-				printf("Sending headers: %s\n",headers);
 		    const esp_websocket_client_config_t websocket_cfg = {
 		        .uri = relay_uri,
 						.headers = headers,
@@ -321,8 +326,10 @@ websocket_relay_task(void *pvParameter)
       if (esp_websocket_client_is_connected(client) && strcmp(token,"")!=0) {
         if (strcmp(wss_data_out,"")!=0) {
           // int len = snprintf(wss_data_out,sizeof(wss_data_out),wss_data_out);
-          // ESP_LOGI(TAG, "Sending %s", wss_data_out);
-          esp_websocket_client_send(client, wss_data_out, sizeof(wss_data_out), portMAX_DELAY);
+					char buf[2000];
+					int len = sprintf(buf, "%s", wss_data_out);
+          ESP_LOGV(TAG, "Sending %s", wss_data_out);
+          esp_websocket_client_send(client, buf, len, portMAX_DELAY);
 					wss_data_out_ready = false;
 					strcpy(wss_data_out,"");
         }

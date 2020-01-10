@@ -73,9 +73,9 @@ void app_main(void)
 
   xTaskCreate(&websocket_utilities_task, "websocket_utilities_task", 10000, NULL, 5, NULL);
   xTaskCreate(&websocket_relay_task, "websocket_relay_task", 20000, NULL, 5, NULL);
-  // xTaskCreate(&temperature_task, "temperature_service_task", 5000, NULL, 5, NULL);
-  // xTaskCreate(&ph_task, "ph_service_task", 5000, NULL, 5, NULL);
-  // xTaskCreate(&ec_task, "ec_service_task", 5000, NULL, 5, NULL);
+  xTaskCreate(&temperature_task, "temperature_service_task", 5000, NULL, 5, NULL);
+  xTaskCreate(&ph_task, "ph_service_task", 5000, NULL, 5, NULL);
+  xTaskCreate(&ec_task, "ec_service_task", 5000, NULL, 5, NULL);
 
   while (1) {
     current_time++;
