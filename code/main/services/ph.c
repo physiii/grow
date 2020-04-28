@@ -1,5 +1,5 @@
-float ph_bias = 5180; // 4973
-float PH_SLOPE = 292; // 256
+float ph_bias = 4695; // 4973
+float PH_SLOPE = 450; // 256
 int COUNT_MOD = 10;
 float PH_CAL = 7;
 float PH_SET_POINT = 5.8;
@@ -110,9 +110,10 @@ check_ph_state()
       ph.value = (ph_bias - ph.reading)/PH_SLOPE;
       cJSON *number = cJSON_CreateNumber(ph.value);
       cJSON_ReplaceItemInObjectCaseSensitive(state,"ph",number);
+      printf("! --- Reading: %d | pH: %f --- !\n", ph.reading, ph.value);
       sum_value+=ph.reading;
-      cnt++;
-  }
+  }  cnt++;
+  cnt++;
 
   if ((cnt % COUNT_MOD)==0) {
     avg_value = sum_value / COUNT_MOD;
@@ -135,6 +136,6 @@ ph_task(void *pvParameter)
   while (1) {
     //outgoing messages to other services
     check_ph_state();
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(200 / portTICK_PERIOD_MS);
   }
 }
